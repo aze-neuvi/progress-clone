@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Progres Plus — Student Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="imdone.css" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">
+        P
+      </div>
+      <div class="logo-text">
+        Progres Plus 
+        <span>Student Portal</span>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-section">
+        Academic
+      </div>
+      <div class="nav-item active" data-page="dashboard" onclick="goToPage(this)">
+        Dashboard
+      </div>
+      <div class="nav-item" data-page="grades"   onclick="goToPage(this)">
+        Grade Report
+      </div>
+      <div class="nav-item" data-page="schedule" onclick="goToPage(this)">
+        Schedule
+      </div>
+      <div class="nav-section">
+        Administrative
+      </div>
+      <div class="nav-item" data-page="dossier"  onclick="goToPage(this)">
+        Admin File
+      </div>
+      <div class="nav-item" data-page="groups"   onclick="goToPage(this)">
+        Groups & Sections
+      </div>
+      <div class="nav-item" data-page="news"     onclick="goToPage(this)">
+        News <span class="badge" id="news-badge">3</span>
+      </div>
+      <div class="nav-item" data-page="profile"  onclick="goToPage(this)">
+        My Profile</div>
+    </nav>
+    <div class="logout-btn" onclick="alert('Logged out!')">
+       Log Out
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="page active" id="page-dashboard">
+      <div class="header">
+        <div>
+          <h1>Hello, <span id="dash-firstname"></span> </h1>
+          <p id="dash-subtitle"></p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline"> Transcript</button>
+          <button class="btn btn-primary"> Notifications</button>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Overall Average</div>
+          <div class="stat-value" id="dash-gpa"></div>
+          <div class="stat-sub">/ 20 this semester</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Modules</div>
+          <div class="stat-value" id="dash-modules"></div>
+          <div class="stat-sub" id="dash-modules-sub"></div>
+          <div class="stat-trend up" id="dash-modules-status"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Next Exam</div>
+          <div class="stat-value" id="dash-exam-date" style="font-size:22px;padding-top:4px"></div>
+          <div class="stat-sub" id="dash-exam-name"></div>
+          <div class="stat-trend" id="dash-exam-room" style="color:var(--gold-light)"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Credits Earned</div>
+          <div class="stat-value" id="dash-credits"></div>
+          <div class="stat-sub" id="dash-credits-sub"></div>
+          <div class="progress-bar"><div class="progress-fill" id="dash-credits-bar"></div></div>
+        </div>
+      </div>
+      <div class="grid-wide-narrow">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Recent Grades</div>
+            <div class="card-link" onclick="goToPage(document.querySelector('[data-page=grades]'))">See all →</div>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Module</th><th>Average</th><th>Credits</th><th>Status</th></tr></thead>
+            <tbody id="dash-grades-body"></tbody>
+          </table>
+        </div>
+        <div class="col-stack">
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px">Today's Classes</div>
+            <div id="today-classes"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Latest Announcements</div>
+          <div class="card-link" onclick="goToPage(document.querySelector('[data-page=news]'))">All →</div>
+        </div>
+        <div id="dash-news"></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-grades">
+      <div class="header">
+        <div><h1>Grade <span>Report</span></h1><p id="grades-subtitle"></p></div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this)">Semester 1</div>
+        <div class="tab" onclick="switchTab(this)">Semester 2</div>
+        <div class="tab" onclick="switchTab(this)">All</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Average</div><div class="stat-value" id="g-avg"></div><div class="stat-sub">/ 20</div></div>
+      
+        <div class="stat-card"><div class="stat-label">Credits</div><div class="stat-value" id="g-credits"></div><div class="stat-sub">this semester</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Module Details</div>
+          <span class="pill pill-muted" id="g-count"></span>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Module</th><th>Coeff</th><th>Credits</th><th>CC</th><th>Exam</th><th>Average</th><th style="text-align:right">Status</th></tr></thead>
+          <tbody id="full-grades-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="page" id="page-schedule">
+      <div class="header">
+        <div><h1>Class <span>Schedule</span></h1><p id="schedule-subtitle"></p></div>
+      </div>
+
+      <div id="schedule-grid" class="grid-2col"></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Color Guide</div></div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)"><div style="width:12px;height:12px;border-radius:2px;background:var(--gold)"></div>Lecture</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)"><div style="width:12px;height:12px;border-radius:2px;background:var(--blue)"></div>Tutorial (TD)</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)"><div style="width:12px;height:12px;border-radius:2px;background:var(--purple)"></div>Lab (TP)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-dossier">
+      <div class="header">
+        <div><h1>Admin <span>File</span></h1><p>Scholarship & registration</p></div>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Scholarship</div>
+            <span class="pill pill-muted" id="bourse-year"></span>
+          </div>
+          <div class="stepper" id="bourse-steps"></div>
+          <div id="bourse-details"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Registration</div></div>
+          <div id="registration-details"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Academic Calendar</div>
+          <span class="pill pill-muted" id="holidays-count"></span>
+        </div>
+        <div id="holidays-list"></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-groups">
+      <div class="header"><div><h1>Groups & <span>Sections</span></h1><p>Academic year 2025/2026</p></div></div>
+      <div class="grid-2col">
+        <div class="card"><div class="card-header"><div class="card-title">My Section</div></div><div id="groups-section"></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">Department</div></div><div id="groups-dept"></div></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-news">
+      <div class="header"><div><h1>News & <span>Announcements</span></h1><p>From your university</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Latest News</div><span class="pill pill-muted" id="news-count"></span></div>
+        <div id="news-list"></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-profile">
+      <div class="header">
+        <div><h1>My <span>Profile</span></h1><p>Student card</p></div>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="openModal()"> View Student ID Card</button>
+        </div>
+      </div>
+      <div class="grid-2col">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:20px;margin-bottom:24px">
+            <div id="profile-avatar" style="width:72px;height:72px;border-radius:16px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;color:var(--navy);font-family:'Playfair Display',serif"></div>
+            <div>
+              <div id="profile-name" style="font-family:'Playfair Display',serif;font-size:20px;color:var(--cream-light)"></div>
+              <div id="profile-id"   style="font-size:13px;color:var(--muted);margin-top:4px"></div>
+              <span class="pill pill-green" style="margin-top:8px;display:inline-block">Active Student</span>
+            </div>
+          </div>
+          <div id="profile-personal"></div>
+        </div>
+        <div class="col-stack">
+          <div class="card"><div class="card-title" style="margin-bottom:14px">Academic Info</div><div id="profile-academic"></div></div>
+          <div class="card"><div class="card-title" style="margin-bottom:14px">Scholarship</div><div id="profile-bourse"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+    <div class="modal-overlay" id="id-modal" onclick="handleModalClick(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">x</button>
+      <div class="id-card-wrapper" id="id-card">
+        <div class="id-card-inner">
+          <div class="id-card-front"></div>
+          <div class="id-card-back"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script src="imdone.js"></script>
+</html>
